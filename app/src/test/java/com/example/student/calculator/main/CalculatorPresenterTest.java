@@ -1,16 +1,12 @@
 package com.example.student.calculator.main;
 
 import com.example.student.calculator.data.Calculator;
-import com.example.student.calculator.main.CalculatorPresenter;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -18,39 +14,106 @@ import static org.mockito.Mockito.verify;
  */
 
 public class CalculatorPresenterTest {
-    private CalculatorPresenter presenter;
+	private CalculatorPresenter presenter;
 
-    @Mock
-    CalculatorView view;
+	@Mock
+	CalculatorView view;
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        Calculator calculator = new Calculator();
-        presenter = new CalculatorPresenter(calculator,view);
-    }
+	@Before
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+		Calculator calculator = new Calculator();
+		presenter = new CalculatorPresenter(calculator, view);
+	}
 
-    @Test
-    public void shouldShowZeroAfterReset() {
-        presenter.reset();
+	@Test
+	public void shouldShowZeroAfterReset() {
+		presenter.onResetClick();
 
-        verify(view).setCalculatorResult(0);
-    }
+		verify(view).setCalculatorResult(0);
+	}
 
-    @Test
-    public void shouldShowSingleDigitNumber() {
-        presenter.reset();
-        presenter.onNumberClick(5);
+	@Test
+	public void shouldShowSingleDigitNumber() {
+		presenter.onResetClick();
+		presenter.onNumberClick(5);
 
-        verify(view).setCalculatorResult(5);
-    }
+		verify(view).setCalculatorResult(5);
+	}
 
-    @Test
-    public void shouldShowTwoDigitNumber() {
-        presenter.reset();
-        presenter.onNumberClick(5);
-        presenter.onNumberClick(7);
+	@Test
+	public void shouldShowTwoDigitNumber() {
+		presenter.onResetClick();
+		presenter.onNumberClick(5);
+		presenter.onNumberClick(7);
+		verify(view).setCalculatorResult(57);
+	}
 
-        verify(view).setCalculatorResult(57);
-    }
+	@Test
+	public void shouldDeleteLatestNumber() {
+		presenter.onResetClick();
+		presenter.onNumberClick(5);
+		presenter.onNumberClick(7);
+		presenter.onNumberClick(9);
+		presenter.onBackClick();
+		verify(view).setCalculatorResult(57);
+	}
+
+	@Test
+	public void shouldDeleteAll() {
+		presenter.onResetClick();
+		presenter.onNumberClick(5);
+		presenter.onNumberClick(7);
+		presenter.onNumberClick(9);
+		presenter.onResetClick();
+		verify(view, atLeastOnce()).setCalculatorResult(0);
+	}
+
+	@Test
+	public void shouldAdd() {
+		presenter.onResetClick();
+		presenter.onNumberClick(5);
+		presenter.onNumberClick(7);
+		presenter.onOpClick(CalculatorPresenter.OPERATOR_ADD);
+		presenter.onNumberClick(9);
+		presenter.onNumberClick(9);
+		presenter.calculate();
+		verify(view).setCalculatorResult(156);
+	}
+
+	@Test
+	public void shouldSub() {
+		presenter.onResetClick();
+		presenter.onNumberClick(1);
+		presenter.onNumberClick(4);
+		presenter.onNumberClick(4);
+		presenter.onOpClick(CalculatorPresenter.OPERATOR_SUB);
+		presenter.onNumberClick(4);
+		presenter.onNumberClick(4);
+		presenter.calculate();
+		verify(view).setCalculatorResult(100);
+	}
+
+	@Test
+	public void shouldMul() {
+		presenter.onResetClick();
+		presenter.onNumberClick(4);
+		presenter.onOpClick(CalculatorPresenter.OPERATOR_MUL);
+		presenter.onNumberClick(4);
+		presenter.calculate();
+		verify(view).setCalculatorResult(16);
+	}
+
+	@Test
+	public void shouldDiv() {
+		presenter.onResetClick();
+		presenter.onNumberClick(1);
+		presenter.onNumberClick(0);
+		presenter.onNumberClick(8);
+		presenter.onOpClick(CalculatorPresenter.OPERATOR_DIV);
+		presenter.onNumberClick(1);
+		presenter.onNumberClick(2);
+		presenter.calculate();
+		verify(view).setCalculatorResult(9);
+	}
 }

@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements CalculatorView {
             Calculator calculator = new Calculator();
             presenter = new CalculatorPresenter(calculator, this);
         }
-        presenter.reset();
+        presenter.onResetClick();
     }
 
     private void initViewHolders() {
