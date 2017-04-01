@@ -15,7 +15,6 @@ public class Calculator {
 	private boolean isError = false;
 	
 	public void setNumber(int result) {
-		// pullDown();
 		this.b = result;
 	}
 	
@@ -45,6 +44,10 @@ public class Calculator {
 	}
 	
 	public int getResult() {
+		return b;
+	}
+	
+	public int forceResult() {
 		if (isBothExist()) calculate();
 		return b;
 	}

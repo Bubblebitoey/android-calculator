@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -15,32 +15,32 @@ import static org.mockito.Mockito.verify;
 
 public class CalculatorPresenterTest {
 	private CalculatorPresenter presenter;
-
+	private Calculator calculator;
+	
 	@Mock
 	CalculatorView view;
-
+	
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		Calculator calculator = new Calculator();
+		calculator = new Calculator();
 		presenter = new CalculatorPresenter(calculator, view);
 	}
-
+	
 	@Test
 	public void shouldShowZeroAfterReset() {
 		presenter.onResetClick();
-
 		verify(view).setCalculatorResult(0);
 	}
-
+	
 	@Test
 	public void shouldShowSingleDigitNumber() {
 		presenter.onResetClick();
 		presenter.onNumberClick(5);
-
+		
 		verify(view).setCalculatorResult(5);
 	}
-
+	
 	@Test
 	public void shouldShowTwoDigitNumber() {
 		presenter.onResetClick();
@@ -48,7 +48,7 @@ public class CalculatorPresenterTest {
 		presenter.onNumberClick(7);
 		verify(view).setCalculatorResult(57);
 	}
-
+	
 	@Test
 	public void shouldDeleteLatestNumber() {
 		presenter.onResetClick();
@@ -56,19 +56,18 @@ public class CalculatorPresenterTest {
 		presenter.onNumberClick(7);
 		presenter.onNumberClick(9);
 		presenter.onBackClick();
-		verify(view).setCalculatorResult(57);
+		verify(view, atMost(2)).setCalculatorResult(57);
 	}
-
+	
 	@Test
 	public void shouldDeleteAll() {
 		presenter.onResetClick();
 		presenter.onNumberClick(5);
 		presenter.onNumberClick(7);
 		presenter.onNumberClick(9);
-		presenter.onResetClick();
-		verify(view, atLeastOnce()).setCalculatorResult(0);
+		verify(view).setCalculatorResult(0);
 	}
-
+	
 	@Test
 	public void shouldAdd() {
 		presenter.onResetClick();
@@ -80,7 +79,21 @@ public class CalculatorPresenterTest {
 		presenter.calculate();
 		verify(view).setCalculatorResult(156);
 	}
-
+	
+	@Test
+	public void shouldAdd2Time() {
+		presenter.onResetClick();
+		presenter.onNumberClick(5);
+		presenter.onNumberClick(7);
+		presenter.onOpClick(CalculatorPresenter.OPERATOR_ADD);
+		presenter.onNumberClick(9);
+		presenter.onNumberClick(9);
+		presenter.onOpClick(CalculatorPresenter.OPERATOR_ADD);
+		presenter.onNumberClick(4);
+		presenter.calculate();
+		verify(view).setCalculatorResult(160);
+	}
+	
 	@Test
 	public void shouldSub() {
 		presenter.onResetClick();
@@ -93,7 +106,7 @@ public class CalculatorPresenterTest {
 		presenter.calculate();
 		verify(view).setCalculatorResult(100);
 	}
-
+	
 	@Test
 	public void shouldMul() {
 		presenter.onResetClick();
@@ -103,7 +116,7 @@ public class CalculatorPresenterTest {
 		presenter.calculate();
 		verify(view).setCalculatorResult(16);
 	}
-
+	
 	@Test
 	public void shouldDiv() {
 		presenter.onResetClick();
