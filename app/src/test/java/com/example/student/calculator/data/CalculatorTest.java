@@ -52,7 +52,6 @@ public class CalculatorTest {
 	
 	@Test
 	public void shouldAddThreeNumbers() {
-		calculator.reset();
 		calculator.setNumber(1234);
 		calculator.setOp(Calculator.OPERATOR_ADD);
 		calculator.setNumber(4321);
@@ -63,7 +62,7 @@ public class CalculatorTest {
 	}
 	
 	@Test
-	public void shouldSubtractThreeNumbersByOPAndNum() {
+	public void shouldSubtractThreeTime() {
 		calculator.reset();
 		calculator.setNumber(1000);
 		calculator.setOp(Calculator.OPERATOR_SUB);
@@ -72,8 +71,9 @@ public class CalculatorTest {
 		calculator.setOp(Calculator.OPERATOR_SUB);
 		calculator.setNumber(900);
 		calculator.setOp(5);
-		
-		assertEquals(99, calculator.getResult());
+		calculator.setOp(Calculator.OPERATOR_SUB);
+		calculator.setNumber(9);
+		assertEquals(90, calculator.getResult());
 	}
 	
 	@Test
@@ -151,6 +151,20 @@ public class CalculatorTest {
 		assertTrue(calculator.isError());
 		calculator.reset();
 		assertFalse(calculator.isError());
+	}
+	
+	@Test
+	public void shouldSet2DigitNumbers() {
+		calculator.reset();
+		calculator.setNumber(1);
+		calculator.setNumber(12);
+		calculator.setNumber(123);
+		calculator.setOp(Calculator.OPERATOR_ADD);
+		calculator.setNumber(1);
+		calculator.setNumber(10);
+		calculator.setNumber(100);
+		calculator.calculate();
+		assertEquals(223, calculator.getResult());
 	}
 	
 	private void print() {

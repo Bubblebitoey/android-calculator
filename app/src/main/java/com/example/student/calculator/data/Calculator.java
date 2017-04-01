@@ -15,13 +15,14 @@ public class Calculator {
 	private boolean isError = false;
 	
 	public void setNumber(int result) {
-		pullDown();
+		// pullDown();
 		this.b = result;
 	}
 	
 	public void setOp(int op) {
 		if (op == 5 || isBothExist()) {
 			calculate();
+			if (op != 5) pullDown();
 		} else {
 			pullDown();
 		}
@@ -34,9 +35,9 @@ public class Calculator {
 	 * all int variable must be 0, except <b>b</b>
 	 */
 	public void calculate() {
-		b = operation(a, this.op, b);
-		a = 0;
-		op = 0;
+		this.b = operation(a, this.op, b);
+		this.a = 0;
+		this.op = 0;
 	}
 	
 	public boolean isError() {
