@@ -4,86 +4,156 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by jittat on 30/3/2560.
  */
 public class CalculatorTest {
 	Calculator calculator;
-
+	
 	@Before
 	public void setUp() {
 		calculator = new Calculator();
 	}
-
+	
 	@Test
 	public void shouldReturnZeroAfterReset() {
 		calculator.reset();
 		assertEquals(0, calculator.getResult());
 	}
-
+	
 	@Test
 	public void shouldReturnValueAfterSet() {
 		calculator.reset();
-		calculator.setResult(1234);
+		calculator.setNumber(1234);
 		assertEquals(1234, calculator.getResult());
 	}
-
+	
 	@Test
 	public void shouldAddTwoNumbers() {
 		calculator.reset();
-		calculator.setResult(1234);
+		calculator.setNumber(1234);
 		calculator.setOp(Calculator.OPERATOR_ADD);
-		assertEquals(1334, calculator.operate(100));
+		calculator.setNumber(100);
+		calculator.calculate();
+		assertEquals(1334, calculator.getResult());
 	}
-
+	
+	public void shouldAddTwoNumbersByOP5() {
+		calculator.reset();
+		calculator.setNumber(1234);
+		calculator.setOp(Calculator.OPERATOR_ADD);
+		calculator.setNumber(100);
+		calculator.setOp(5);
+		assertEquals(1334, calculator.getResult());
+	}
+	
 	@Test
 	public void shouldAddThreeNumbers() {
 		calculator.reset();
-		calculator.setResult(1234);
+		calculator.setNumber(1234);
 		calculator.setOp(Calculator.OPERATOR_ADD);
-		assertEquals(1834, calculator.operate(600));
+		calculator.setNumber(4321);
+		calculator.setOp(Calculator.OPERATOR_ADD);
+		calculator.setNumber(1);
+		calculator.calculate();
+		assertEquals(5556, calculator.getResult());
 	}
-
+	
 	@Test
-	public void shouldSubtractTwoNumber() {
+	public void shouldSubtractThreeNumbersByOPAndNum() {
 		calculator.reset();
-		calculator.setResult(1000);
+		calculator.setNumber(1000);
 		calculator.setOp(Calculator.OPERATOR_SUB);
-		assertEquals(901, calculator.operate(99));
+		calculator.setNumber(1);
+		calculator.calculate();
+		calculator.setOp(Calculator.OPERATOR_SUB);
+		calculator.setNumber(900);
+		calculator.setOp(5);
+		
+		assertEquals(99, calculator.getResult());
 	}
-
+	
+	@Test
+	public void shouldSubtractTwoNumbers() {
+		calculator.reset();
+		calculator.setNumber(1000);
+		calculator.setOp(Calculator.OPERATOR_SUB);
+		calculator.setNumber(1);
+		calculator.calculate();
+		assertEquals(999, calculator.getResult());
+	}
+	
 	@Test
 	public void shouldMultiplyTwoNumber() {
 		calculator.reset();
-		calculator.setResult(100);
+		calculator.setNumber(1000);
 		calculator.setOp(Calculator.OPERATOR_MUL);
-		assertEquals(1000, calculator.operate(10));
+		calculator.setNumber(2);
+		calculator.calculate();
+		assertEquals(2000, calculator.getResult());
 	}
-
+	
+	@Test
+	public void shouldMultiplyThreeNumber() {
+		calculator.reset();
+		calculator.setNumber(1000);
+		calculator.setOp(Calculator.OPERATOR_MUL);
+		calculator.setNumber(2);
+		calculator.calculate();
+		calculator.setOp(Calculator.OPERATOR_MUL);
+		calculator.setNumber(2);
+		assertEquals(4000, calculator.getResult());
+	}
+	
 	@Test
 	public void shouldDivideTwoNumber() {
 		calculator.reset();
-		calculator.setResult(1250);
+		calculator.setNumber(1000);
 		calculator.setOp(Calculator.OPERATOR_DIV);
-		assertEquals(5, calculator.operate(250));
+		calculator.setNumber(250);
+		calculator.calculate();
+		assertEquals(4, calculator.getResult());
 	}
-
+	
+	@Test
+	public void shouldChangeOP() {
+		calculator.reset();
+		calculator.setNumber(1000);
+		calculator.setOp(Calculator.OPERATOR_DIV);
+		calculator.setOp(Calculator.OPERATOR_ADD);
+		calculator.setOp(Calculator.OPERATOR_SUB);
+		calculator.setNumber(250);
+		assertEquals(750, calculator.getResult());
+	}
+	
 	@Test
 	public void shouldReturnErrorWhenDivideByZero() {
 		calculator.reset();
-		calculator.setResult(1);
+		calculator.setNumber(1);
 		calculator.setOp(Calculator.OPERATOR_DIV);
-		assertEquals(1, calculator.operate(0));
+		calculator.setNumber(0);
+		calculator.calculate();
+		// should error
+		assertTrue(calculator.isError());
+		// and result will be 0
+		assertEquals(0, calculator.getResult());
 	}
-
+	
 	@Test
 	public void shouldKeepErrorStateUntilReset() {
-		calculator.reset();
-		calculator.setResult(1);
+		calculator.setNumber(1);
 		calculator.setOp(Calculator.OPERATOR_DIV);
-		assertEquals(1, calculator.operate(0));
+		calculator.setNumber(0);
+		calculator.calculate();
+		assertTrue(calculator.isError());
+		calculator.reset();
+		assertFalse(calculator.isError());
 	}
-
-
+	
+	private void print() {
+		System.out.println(calculator.toString());
+	}
 }
