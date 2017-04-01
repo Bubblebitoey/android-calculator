@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity implements CalculatorView {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
 		initViewHolders();
 		
 		if (presenter == null) {
@@ -28,17 +27,6 @@ public class MainActivity extends AppCompatActivity implements CalculatorView {
 	
 	private void initViewHolders() {
 		resultTextView = (TextView) findViewById(R.id.textview_calculator_result);
-	}
-	
-	// view implementation
-	
-	public void setCalculatorResult(int result) {
-		resultTextView.setText(result);
-	}
-	
-	@Override
-	public int getResult() {
-		return Integer.valueOf(String.valueOf(resultTextView.getText()));
 	}
 	
 	// event handlers
@@ -79,5 +67,10 @@ public class MainActivity extends AppCompatActivity implements CalculatorView {
 	
 	public void onBackClick(View view) {
 		presenter.onBackClick();
+	}
+	
+	@Override
+	public void setCalculatorResult(int result) {
+		resultTextView.setText(String.valueOf(result));
 	}
 }

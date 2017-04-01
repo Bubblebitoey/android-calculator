@@ -15,17 +15,15 @@ public class Calculator {
 	private boolean isError = false;
 	
 	public void setNumber(int result) {
+		if (op != 0) b = 0;
 		this.b = result;
 	}
 	
 	public void setOp(int op) {
 		if (op == 5 || isBothExist()) {
 			calculate();
-			if (op != 5) pullDown();
-		} else {
-			pullDown();
 		}
-		
+		pullDown();
 		this.op = op;
 	}
 	
@@ -33,6 +31,7 @@ public class Calculator {
 	 * force calculate {@link #a}, {@link #op}, {@link #b} <br>
 	 * all int variable must be 0, except <b>b</b>
 	 */
+	
 	public void calculate() {
 		this.b = operation(a, this.op, b);
 		this.a = 0;
@@ -79,6 +78,16 @@ public class Calculator {
 	 * if <b>b</b> exist, move <b>b</b> to <b>a</b>
 	 */
 	private void pullDown() {
+		if (b != 0) {
+			a = b;
+			// b = 0;
+		}
+	}
+	
+	/**
+	 * if <b>b</b> exist, move <b>b</b> to <b>a</b> and delete old <b>b</b>
+	 */
+	private void pullDownAndDelete() {
 		if (b != 0) {
 			a = b;
 			b = 0;

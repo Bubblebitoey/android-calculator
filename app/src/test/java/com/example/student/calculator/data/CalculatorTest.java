@@ -52,6 +52,7 @@ public class CalculatorTest {
 	
 	@Test
 	public void shouldAddThreeNumbers() {
+		calculator.reset();
 		calculator.setNumber(1234);
 		calculator.setOp(Calculator.OPERATOR_ADD);
 		calculator.setNumber(4321);
@@ -73,6 +74,7 @@ public class CalculatorTest {
 		calculator.setOp(5);
 		calculator.setOp(Calculator.OPERATOR_SUB);
 		calculator.setNumber(9);
+		calculator.calculate();
 		assertEquals(90, calculator.getResult());
 	}
 	
@@ -105,6 +107,7 @@ public class CalculatorTest {
 		calculator.calculate();
 		calculator.setOp(Calculator.OPERATOR_MUL);
 		calculator.setNumber(2);
+		calculator.calculate();
 		assertEquals(4000, calculator.getResult());
 	}
 	
@@ -126,6 +129,7 @@ public class CalculatorTest {
 		calculator.setOp(Calculator.OPERATOR_ADD);
 		calculator.setOp(Calculator.OPERATOR_SUB);
 		calculator.setNumber(250);
+		calculator.calculate();
 		assertEquals(750, calculator.getResult());
 	}
 	
@@ -165,6 +169,19 @@ public class CalculatorTest {
 		calculator.setNumber(100);
 		calculator.calculate();
 		assertEquals(223, calculator.getResult());
+	}
+	
+	@Test
+	public void shouldShowResultEveryTime() {
+		calculator.reset();
+		calculator.setNumber(4);
+		assertEquals(4, calculator.getResult());
+		calculator.setNumber(46);
+		assertEquals(46, calculator.getResult());
+		calculator.setNumber(461);
+		assertEquals(461, calculator.getResult());
+		calculator.setOp(Calculator.OPERATOR_ADD);
+		assertEquals(461, calculator.getResult());
 	}
 	
 	private void print() {
