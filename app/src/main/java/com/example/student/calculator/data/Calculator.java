@@ -7,6 +7,11 @@ import java.util.*;
  */
 
 public class Calculator {
+	public enum State {
+		start, number, op
+	}
+	
+	private static State s = State.start;
 	public static final int OPERATOR_ADD = 1;
 	public static final int OPERATOR_SUB = 2;
 	public static final int OPERATOR_MUL = 3;
@@ -15,16 +20,28 @@ public class Calculator {
 	private boolean isError = false;
 	
 	public void setNumber(int result) {
-		if (op != 0) b = 0;
 		this.b = result;
+		print("Number");
+		s = State.number;
 	}
 	
 	public void setOp(int op) {
-		if (op == 5 || isBothExist()) {
+		if (s == State.op) {
+			this.op = op;
+			return;
+		}
+		
+		if (op == 5) {
+			calculate();
+			return;
+		}
+		if (isBothExist()) {
 			calculate();
 		}
-		pullDown();
 		this.op = op;
+		pullDown(isBExist());
+		print("OP    ");
+		s = State.op;
 	}
 	
 	/**
@@ -36,6 +53,8 @@ public class Calculator {
 		this.b = operation(a, this.op, b);
 		this.a = 0;
 		this.op = 0;
+		s = State.number;
+		print("Cal   ");
 	}
 	
 	public boolean isError() {
@@ -44,6 +63,10 @@ public class Calculator {
 	
 	public int getResult() {
 		return b;
+	}
+	
+	public State getState() {
+		return s;
 	}
 	
 	public int forceResult() {
@@ -75,20 +98,20 @@ public class Calculator {
 	}
 	
 	/**
-	 * if <b>b</b> exist, move <b>b</b> to <b>a</b>
+	 * if condition is {@code true}, move <b>b</b> to <b>a</b>
 	 */
-	private void pullDown() {
-		if (b != 0) {
+	private void pullDown(boolean condition) {
+		if (condition) {
 			a = b;
 			// b = 0;
 		}
 	}
 	
 	/**
-	 * if <b>b</b> exist, move <b>b</b> to <b>a</b> and delete old <b>b</b>
+	 * if condition is {@code true}, move <b>b</b> to <b>a</b> and delete old <b>b</b>
 	 */
-	private void pullDownAndDelete() {
-		if (b != 0) {
+	private void pullDownAndDelete(boolean condition) {
+		if (condition) {
 			a = b;
 			b = 0;
 		}
@@ -102,6 +125,10 @@ public class Calculator {
 		return b != 0;
 	}
 	
+	private boolean isOPExist() {
+		return op != 0;
+	}
+	
 	private boolean isBothExist() {
 		return isAExist() && isBExist();
 	}
@@ -109,5 +136,9 @@ public class Calculator {
 	@Override
 	public String toString() {
 		return String.format(Locale.ENGLISH, "Calculator{a=%-6d, op=%-2d, b=%-6d, %-6s}", a, op, b, isError ? "ERROR": "NOT");
+	}
+	
+	private void print(String tag) {
+		System.out.println(tag + ": " + this);
 	}
 }

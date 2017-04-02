@@ -172,19 +172,36 @@ public class CalculatorTest {
 	}
 	
 	@Test
-	public void shouldShowResultEveryTime() {
+	public void shouldShowResultEveryTime1() {
 		calculator.reset();
 		calculator.setNumber(4);
 		assertEquals(4, calculator.getResult());
-		calculator.setNumber(46);
-		assertEquals(46, calculator.getResult());
-		calculator.setNumber(461);
-		assertEquals(461, calculator.getResult());
+		calculator.setNumber(42);
+		assertEquals(42, calculator.getResult());
+		calculator.setNumber(421);
+		assertEquals(421, calculator.getResult());
 		calculator.setOp(Calculator.OPERATOR_ADD);
-		assertEquals(461, calculator.getResult());
+		assertEquals(421, calculator.getResult());
+		calculator.setNumber(1);
+		assertEquals(1, calculator.getResult());
+		calculator.setNumber(13);
+		assertEquals(13, calculator.getResult());
+		calculator.setNumber(134);
+		assertEquals(134, calculator.getResult());
+		calculator.calculate();
+		assertEquals(555, calculator.getResult());
 	}
 	
-	private void print() {
-		System.out.println(calculator.toString());
+	@Test
+	public void shouldShowResultEveryTime2() {
+		calculator.reset();
+		calculator.setNumber(4);
+		assertEquals(4, calculator.getResult());
+		calculator.setOp(Calculator.OPERATOR_ADD);
+		assertEquals(4, calculator.getResult());
+		calculator.setNumber(1);
+		assertEquals(1, calculator.getResult());
+		calculator.calculate();
+		assertEquals(5, calculator.getResult());
 	}
 }

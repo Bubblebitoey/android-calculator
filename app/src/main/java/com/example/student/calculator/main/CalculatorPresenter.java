@@ -23,13 +23,16 @@ public class CalculatorPresenter {
 	}
 	
 	public void onNumberClick(int num) {
-		int newNum = Integer.parseInt(calculator.getResult() + "" + num);
+		int newNum = 0;
+		if (calculator.getState() == Calculator.State.op) newNum = Integer.parseInt("" + num);
+		else newNum = Integer.parseInt(calculator.getResult() + "" + num);
 		calculator.setNumber(newNum);
 		showResult();
 	}
 	
 	public void onOpClick(int op) {
 		calculator.setOp(op);
+		// calculator.setNumber(0);
 		showResult();
 	}
 	
